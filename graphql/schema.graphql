@@ -15,7 +15,7 @@ type Query {
 "Indicates what fields are available at the top level of a mutation operation."
 type Mutation {
   "Login a user with credentials."
-  login(email: String!, password: String!, token_name: String): AuthPayload!
+  login(email: String!, password: String!, token_name: String): UserCredential!
     @validator
 
   "Logout a user."
@@ -28,10 +28,10 @@ type Mutation {
     password: String!
     password_confirmation: String!
     token_name: String
-  ): AuthPayload! @validator
+  ): UserCredential! @validator
 }
 
-"Entity representing a user of this application."
+"Object type representing a user of this application."
 type User {
   id: ID!
   name: String!
@@ -41,8 +41,10 @@ type User {
   updated_at: DateTime
 }
 
-"Entity representing a user of this application and their authentication token."
-type AuthPayload {
+"Object type representing a user of this application and their authentication data."
+type UserCredential {
   user: User!
   access_token: String!
+  token_type: TokenType!
+  expires_in: Int
 }

@@ -2,6 +2,7 @@
 
 namespace App\GraphQL\Mutations;
 
+use App\Enums\TokenType;
 use App\Models\User;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Contracts\Translation\Translator;
@@ -35,7 +36,9 @@ final class Login
 
         return [
             'user'         => $user,
+            'token_type'   => TokenType::BEARER,
             'access_token' => $token->plainTextToken,
+            'expires_in'   => $token->accessToken->expires_at?->getTimestamp(),
         ];
     }
 }
