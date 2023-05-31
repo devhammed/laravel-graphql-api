@@ -1,0 +1,48 @@
+"Can be used as an argument to upload files using https://github.com/jaydenseric/graphql-multipart-request-spec"
+scalar Upload
+  @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Upload")
+
+"A date-time string with format 'Y-m-d H:i:s', e.g. '2018-01-01 13:00:00'."
+scalar DateTime
+  @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+
+"Indicates what fields are available at the top level of a query operation."
+type Query {
+  "Get the authenticated user profile."
+  me: User! @guard
+}
+
+"Indicates what fields are available at the top level of a mutation operation."
+type Mutation {
+  "Login a user with credentials."
+  login(email: String!, password: String!, token_name: String): AuthPayload!
+    @validator
+
+  "Logout a user."
+  logout: Boolean! @guard
+
+  "Register a user."
+  register(
+    name: String!
+    email: String!
+    password: String!
+    password_confirmation: String!
+    token_name: String
+  ): AuthPayload! @validator
+}
+
+"Entity representing a user of this application."
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  email_verified_at: DateTime
+  created_at: DateTime
+  updated_at: DateTime
+}
+
+"Entity a user of this application and their authentication token."
+type AuthPayload {
+  user: User!
+  access_token: String!
+}
