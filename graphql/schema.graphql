@@ -41,7 +41,7 @@ type User {
   updated_at: DateTime
 }
 
-"Entity a user of this application and their authentication token."
+"Entity representing a user of this application and their authentication token."
 type AuthPayload {
   user: User!
   access_token: String!
