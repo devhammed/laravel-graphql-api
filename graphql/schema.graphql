@@ -41,10 +41,18 @@ type User {
   updated_at: DateTime
 }
 
-"Object type representing a user of this application and their authentication data."
+"Object type representing the access token of a user."
+type AccessToken {
+  name: String!
+  value: String!
+  type: TokenType!
+  abilities: [String!]!
+  created_at: DateTime!
+  expires_at: DateTime
+}
+
+"Object type representing a user of this application and their access token."
 type UserCredential {
   user: User!
-  access_token: String!
-  token_type: TokenType!
-  expires_in: Int
+  access_token: AccessToken!
 }

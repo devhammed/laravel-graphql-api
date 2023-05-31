@@ -3,8 +3,8 @@
 namespace App\GraphQL\Mutations;
 
 use App\Models\User;
-use GraphQL\Error\Error;
 use App\Enums\TokenType;
+use GraphQL\Error\Error;
 
 final class Register
 {
@@ -30,9 +30,14 @@ final class Register
 
         return [
             'user'         => $this->user,
-            'token_type'   => TokenType::BEARER,
-            'access_token' => $token->plainTextToken,
-            'expires_in'   => $token->accessToken->expires_at?->getTimestamp(),
+            'access_token' => [
+                'name'       => $token->accessToken->name,
+                'type'       => TokenType::BEARER,
+                'value'      => $token->plainTextToken,
+                'abilities'  => $token->accessToken->abilities,
+                'expires_at' => $token->accessToken->expires_at,
+                'created_at' => $token->accessToken->created_at,
+            ],
         ];
     }
 }
