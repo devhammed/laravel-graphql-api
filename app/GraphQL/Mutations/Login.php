@@ -3,7 +3,7 @@
 namespace App\GraphQL\Mutations;
 
 use App\Models\User;
-use App\Enums\TokenType;
+use App\Traits\CreatesUserCredential;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Contracts\Translation\Translator;
 use Illuminate\Contracts\Config\Repository as Config;
@@ -11,6 +11,8 @@ use Nuwave\Lighthouse\Exceptions\AuthenticationException;
 
 final class Login
 {
+    use CreatesUserCredential;
+
     public function __construct(
         protected User $user,
         protected Hasher $hash,
@@ -32,18 +34,9 @@ final class Login
             );
         }
 
-        $token = $user->createToken($args['token_name'] ?? 'default');
-
-        return [
-            'user'         => $user,
-            'access_token' => [
-                'name'       => $token->accessToken->name,
-                'type'       => TokenType::BEARER,
-                'value'      => $token->plainTextToken,
-                'abilities'  => $token->accessToken->abilities,
-                'expires_at' => $token->accessToken->expires_at,
-                'created_at' => $token->accessToken->created_at,
-            ],
-        ];
+        return $this->createUserCredential(
+            $user,
+            $args['token_name'] ?? 'default',
+        );
     }
 }

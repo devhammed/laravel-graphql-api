@@ -3,11 +3,13 @@
 namespace App\GraphQL\Mutations;
 
 use App\Models\User;
-use App\Enums\TokenType;
 use GraphQL\Error\Error;
+use App\Traits\CreatesUserCredential;
 
 final class Register
 {
+    use CreatesUserCredential;
+
     public function __construct(protected User $user)
     {
     }
@@ -26,18 +28,9 @@ final class Register
             throw new Error('Could not create user.');
         }
 
-        $token = $this->user->createToken($args['token_name'] ?? 'default');
-
-        return [
-            'user'         => $this->user,
-            'access_token' => [
-                'name'       => $token->accessToken->name,
-                'type'       => TokenType::BEARER,
-                'value'      => $token->plainTextToken,
-                'abilities'  => $token->accessToken->abilities,
-                'expires_at' => $token->accessToken->expires_at,
-                'created_at' => $token->accessToken->created_at,
-            ],
-        ];
+        return $this->createUserCredential(
+            $this->user,
+            $args['token_name'] ?? 'default',
+        );
     }
 }
