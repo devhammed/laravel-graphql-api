@@ -14,7 +14,7 @@ type Query {
 
 "Indicates what fields are available at the top level of a mutation operation."
 type Mutation {
-  "Login a user with credentials."
+  "Login a user with email and password."
   login(email: String!, password: String!, token_name: String): UserCredential!
     @validator
 

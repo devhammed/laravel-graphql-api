@@ -14,15 +14,14 @@ class GraphQLServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app
-            ->make(TypeRegistry::class)
-            ->register(new PhpEnumType(TokenType::class));
+        //
     }
 
     /**
      * Bootstrap services.
      */
-    public function boot(): void
+    public function boot(TypeRegistry $typeRegistry): void
     {
+        $typeRegistry->register(new PhpEnumType(TokenType::class));
     }
 }
