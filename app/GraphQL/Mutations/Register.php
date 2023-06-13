@@ -10,26 +10,20 @@ final class Register
 {
     use CreatesUserCredential;
 
-    public function __construct(protected User $user)
-    {
-    }
-
     public function __invoke(mixed $root, array $args): array
     {
-        $saved = $this->user
-            ->fill([
-                'name'     => $args['name'],
-                'email'    => $args['email'],
-                'password' => $args['password'],
-            ])
-            ->save();
+        $user = new User([
+            'name'     => $args['name'],
+            'email'    => $args['email'],
+            'password' => $args['password'],
+        ]);
 
-        if (!$saved) {
+        if (!$user->save()) {
             throw new Error('Could not create user.');
         }
 
         return $this->createUserCredential(
-            $this->user,
+            $user,
             $args['token_name'] ?? 'default',
         );
     }
