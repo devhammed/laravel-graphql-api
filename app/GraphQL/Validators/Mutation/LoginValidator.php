@@ -23,12 +23,6 @@ final class LoginValidator extends Validator
                 'string',
                 'min:8',
             ],
-            'token_name' => [
-                'nullable',
-                'string',
-                'min:3',
-                'max:100',
-            ],
         ];
     }
 }

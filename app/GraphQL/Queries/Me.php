@@ -3,16 +3,12 @@
 namespace App\GraphQL\Queries;
 
 use App\Models\User;
-use Illuminate\Contracts\Auth\Guard;
+use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 final class Me
 {
-    public function __construct(protected Guard $guard)
+    public function __invoke(mixed $root, array $args, GraphQLContext $ctx): User
     {
-    }
-
-    public function __invoke(mixed $root, array $args): User
-    {
-        return $this->guard->user();
+        return $ctx->user();
     }
 }

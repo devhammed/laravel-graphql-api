@@ -7,6 +7,7 @@ use App\Traits\CreatesUserCredential;
 use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Contracts\Translation\Translator;
 use Illuminate\Contracts\Config\Repository as Config;
+use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use Nuwave\Lighthouse\Exceptions\AuthenticationException;
 
 final class Login
@@ -21,7 +22,7 @@ final class Login
     ) {
     }
 
-    public function __invoke(mixed $root, array $args): array
+    public function __invoke(mixed $root, array $args, GraphQLContext $ctx): array
     {
         $user = $this->user->newQuery()
             ->where('email', $args['email'])
@@ -34,9 +35,6 @@ final class Login
             );
         }
 
-        return $this->createUserCredential(
-            $user,
-            $args['token_name'] ?? 'default',
-        );
+        return $this->createUserCredential($user, $ctx->request()?->userAgent());
     }
 }

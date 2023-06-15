@@ -5,12 +5,13 @@ namespace App\GraphQL\Mutations;
 use App\Models\User;
 use GraphQL\Error\Error;
 use App\Traits\CreatesUserCredential;
+use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 final class Register
 {
     use CreatesUserCredential;
 
-    public function __invoke(mixed $root, array $args): array
+    public function __invoke(mixed $root, array $args, GraphQLContext $ctx): array
     {
         $user = new User([
             'name'     => $args['name'],
@@ -22,9 +23,6 @@ final class Register
             throw new Error('Could not create user.');
         }
 
-        return $this->createUserCredential(
-            $user,
-            $args['token_name'] ?? 'default',
-        );
+        return $this->createUserCredential($user, $ctx->request()?->userAgent());
     }
 }

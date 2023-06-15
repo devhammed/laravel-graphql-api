@@ -32,12 +32,6 @@ final class RegisterValidator extends Validator
                 'min:8',
                 'confirmed',
             ],
-            'token_name' => [
-                'nullable',
-                'string',
-                'min:2',
-                'max:100',
-            ],
         ];
     }
 }

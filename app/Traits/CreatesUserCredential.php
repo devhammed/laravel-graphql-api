@@ -10,9 +10,11 @@ trait CreatesUserCredential
     /**
      * Create a credential for a user.
      */
-    protected function createUserCredential(User $user, string $tokenName): array
+    protected function createUserCredential(User $user, ?string $userAgent = null): array
     {
-        $newAccessToken = $user->createToken($tokenName);
+        $userAgent      = $userAgent ?? 'default';
+        $userAgent      = substr($userAgent, 0, 255);
+        $newAccessToken = $user->createToken($userAgent);
 
         return [
             'user'         => $user,
