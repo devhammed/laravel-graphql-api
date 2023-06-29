@@ -6,6 +6,9 @@ scalar Upload
 scalar DateTime
   @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
 
+"Arbitrary data encoded in JavaScript Object Notation. See https://www.json.org."
+scalar JSON @scalar(class: "App\\GraphQL\\Scalars\\JSON")
+
 "Indicates what fields are available at the top level of a query operation."
 type Query {
   "Get the authenticated user profile."
@@ -27,6 +30,9 @@ type Mutation {
     password: String!
     password_confirmation: String!
   ): UserCredential! @validator
+
+  "Upload a file."
+  upload(file: Upload!): File! @guard @validator
 }
 
 "Object type representing a user of this application."
@@ -35,6 +41,7 @@ type User {
   name: String!
   email: String!
   email_verified_at: DateTime
+  photo: File @morphOne
   created_at: DateTime
   updated_at: DateTime
 }
@@ -53,4 +60,17 @@ type AccessToken {
 type UserCredential {
   user: User!
   access_token: AccessToken!
+}
+
+"Object type representing a file in storage."
+type File {
+  id: ID!
+  name: String!
+  path: String!
+  url: String!
+  type: String!
+  size: Int!
+  meta: JSON!
+  created_at: DateTime!
+  updated_at: DateTime!
 }
